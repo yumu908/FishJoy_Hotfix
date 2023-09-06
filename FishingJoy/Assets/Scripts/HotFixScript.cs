@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -37,7 +37,9 @@ public class HotFixScript : MonoBehaviour {
     /// 自定义 Loader，用于自定义 lua 脚本的路径
     /// </summary>
     private byte[] MyLoader(ref string filePath) {
-        string absParh = @"G:\UnityDocuments\FishingJoy\LuaPackage\" + filePath + ".lua.txt";
+        var dir = Directory.GetParent(Application.dataPath);
+        string absParh = dir  + @"\LuaPackage\" + filePath + ".lua.txt";
+        Debug.Log(absParh);
         return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(absParh)); // 将 Lua 程序转换为了字节数组
     }
 
@@ -49,7 +51,7 @@ public class HotFixScript : MonoBehaviour {
     // 本地加载
     [LuaCallCSharp]
     public static void LoadResource(string resName, string filePath) {
-        AssetBundle ab = AssetBundle.LoadFromFile(@"G:\UnityDocuments\FishingJoy\Assets\AssetBundles\" + filePath);
+        AssetBundle ab = AssetBundle.LoadFromFile(Application.dataPath + @"\AssetBundles\" + filePath);
         GameObject gameObject = ab.LoadAsset<GameObject>(resName);
         prefabDict.Add(resName, gameObject);
     }
